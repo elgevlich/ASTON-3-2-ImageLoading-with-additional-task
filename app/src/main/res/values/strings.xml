@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Fun Images</string>
+    <string name="edit_text">Enter picture url</string>
+    <string name="button_text">Show picture</string>
+</resources>
