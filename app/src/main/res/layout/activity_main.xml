@@ -1,43 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="36dp"
-    tools:context=".MainActivity">
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical"
+	android:padding="36dp"
+	tools:context=".MainActivity"
+	>
 
+	<EditText
+		android:id="@+id/picture_url"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:hint="@string/edit_text"
+		app:layout_constraintBottom_toTopOf="@id/button"
+		app:layout_constraintTop_toTopOf="parent"
+		/>
 
-    <EditText
-        android:id="@+id/picture_url"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/edit_text"
-        app:layout_constraintBottom_toTopOf="@id/button"
-        app:layout_constraintTop_toTopOf="parent" />
+	<Button
+		android:id="@+id/button"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="24dp"
+		android:background="@drawable/image_view_background"
+		android:elevation="@dimen/elevation"
+		android:text="@string/button_text"
+		android:textColor="@color/black"
+		app:layout_constraintBottom_toTopOf="@id/image_view"
+		app:layout_constraintTop_toBottomOf="@id/picture_url"
+		/>
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:background="@drawable/image_view_background"
-        android:elevation="@dimen/elevation"
-        android:text="@string/button_text"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@id/image_view"
-        app:layout_constraintTop_toBottomOf="@id/picture_url" />
-
-    <ImageView
-        android:id="@+id/image_view"
-        android:layout_width="match_parent"
-        android:layout_height="320dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/button"
-        android:src="@drawable/ic_baseline_image_24"
-        android:scaleType="centerCrop"
-        />
+	<ImageView
+		android:id="@+id/image_view"
+		android:layout_width="match_parent"
+		android:layout_height="320dp"
+		android:scaleType="centerCrop"
+		android:src="@drawable/ic_baseline_image_24"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/button"
+		/>
 
 </LinearLayout>

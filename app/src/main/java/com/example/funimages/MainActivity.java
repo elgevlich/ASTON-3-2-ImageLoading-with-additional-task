@@ -2,63 +2,72 @@ package com.example.funimages;
 
 import static com.example.funimages.R.drawable.ic_baseline_image_24;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+import java.io.BufferedInputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-public class MainActivity extends AppCompatActivity {
+	ImageView image;
+	EditText urlEdit;
+	String url;
 
-    ImageView image;
-    EditText urlEdit;
-    String url;
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+		image = findViewById(R.id.image_view);
+		Button button = findViewById(R.id.button);
+		urlEdit = findViewById(R.id.picture_url);
 
-        image = findViewById(R.id.image_view);
-        Button button = findViewById(R.id.button);
-        urlEdit = findViewById(R.id.picture_url);
+		button.setOnClickListener(this);
+	}
 
-        button.setOnClickListener(v -> {
-            url = urlEdit.getText().toString();
-            loadImage(url);
-        });
-    }
+	@Override public void onClick(View view) {
+		url = urlEdit.getText().toString();
+		new DownloadImageTask().execute(url);
+	}
 
-    public void loadImage(String url) {
-        Glide.with(this)
-                .load(url)
-                .placeholder(ic_baseline_image_24)
-                .listener(new RequestListener<Drawable>() {
-                    @Override
-                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                        Log.e("TAG", "Error loading image", e);
-                        return false;
-                    }
-                    @Override
-                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                        return false;
-                    }
-                })
-                .into(image);
-    }
+	private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+
+		HttpURLConnection httpURLConnection;
+
+		protected Bitmap doInBackground(String... urls) {
+			try {
+				URL url = new URL(urls[0]);
+				httpURLConnection = (HttpURLConnection)url.openConnection();
+				InputStream inputStream = new BufferedInputStream(httpURLConnection.getInputStream());
+				return BitmapFactory.decodeStream(inputStream);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		protected void onPostExecute(Bitmap result) {
+			if (result != null) {
+				image.setImageBitmap(result);
+			} else {
+				Toast.makeText(getApplicationContext(), "Cannot download the image:(", Toast.LENGTH_SHORT).show();
+				image.setImageDrawable(getDrawable(ic_baseline_image_24));
+			}
+		}
+
+	}
+
 }
+
+
